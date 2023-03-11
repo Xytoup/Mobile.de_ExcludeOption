@@ -1,5 +1,7 @@
 from time import sleep
 from selenium import webdriver
+from selenium.webdriver.support.select import Select
+from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -96,6 +98,22 @@ km_box.send_keys(Keys.RETURN)
 # Wait for 1 second to ensure the element is fully loaded
 sleep(1)
 
+# Get the user input for the maximum price
+while True:
+    price_input = input("Enter the maximum price (in Euros): ")
+    if price_input.isdigit():
+        break
+    else:
+        print("Invalid input. Please enter a number.")
+
+# Enter the maximum price into the input box
+max_price = driver.find_element(By.XPATH, "//input[@data-testid='price-max-input']")
+max_price.click()
+max_price.send_keys(price_input)
+
+# Wait for 1 second to ensure the element is fully loaded
+sleep(1)
+
 # Find the search button
 search_button = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.ID, "dsp-upper-search-btn")))
 
@@ -103,20 +121,6 @@ search_button = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.I
 search_button.click()
 
 sleep(5)
-
-while True:
-    max_price_input = input("What is your maximum budget in euros? ")
-    try:
-        max_price = int(max_price_input)
-        break
-    except ValueError:
-        print("Please enter a valid integer.")
-
-sleep(1)
-
-max_price_box = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//input[@id='maxPrice']")))
-max_price_box.clear()
-max_price_box.send_keys(max_price_input)
 
 # Wait for user input before quitting the browser
 input("Press Enter to quit")
